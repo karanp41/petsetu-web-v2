@@ -16,6 +16,7 @@ import {
   Calendar,
   CheckCircle,
   Clock,
+  Download,
   Heart,
   MapPin,
   PawPrint,
@@ -130,6 +131,12 @@ export default function Home() {
                 <Button
                   size="lg"
                   className="bg-orange-600 hover:bg-orange-700 text-lg px-8 py-4"
+                  onClick={() =>
+                    window.open(
+                      "https://play.google.com/store/apps/details?id=com.app.mydoggy",
+                      "_blank"
+                    )
+                  }
                 >
                   <Smartphone className="mr-2 h-5 w-5" />
                   Download App
@@ -146,9 +153,15 @@ export default function Home() {
               </div>
 
               <div className="flex items-center space-x-8 text-sm text-gray-600">
+                {/* 10 k downloads */}
+
+                <div className="flex items-center space-x-2">
+                  <Download className="h-5 w-5 text-blue-500" />
+                  <span>10K+ Downloads</span>
+                </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>50,000+ Happy Families</span>
+                  <span>5K+ Happy Families</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Star className="h-5 w-5 text-yellow-500" />
