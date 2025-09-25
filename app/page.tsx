@@ -1,5 +1,6 @@
 "use client";
 
+import HeroBannerCarousel from "@/components/layout/HeroBannerCarousel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -171,22 +172,15 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-orange-200 to-green-200 p-8 shadow-2xl">
-                <Image
-                  src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=500"
-                  alt="Happy family with pet"
-                  fill
-                  priority
-                  className="object-cover rounded-2xl shadow-lg"
-                  sizes="(max-width:768px) 100vw, 50vw"
-                />
-              </div>
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 bg-white p-4 rounded-full shadow-lg animate-bounce">
-                <Heart className="h-8 w-8 text-red-500" />
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-full shadow-lg animate-pulse">
-                <PawPrint className="h-8 w-8 text-orange-500" />
+              <HeroBannerCarousel className="max-w-xl mx-auto" />
+              {/* Floating elements repositioned above carousel */}
+              <div className="pointer-events-none">
+                <div className="absolute -top-4 -right-4 bg-white p-4 rounded-full shadow-lg animate-bounce">
+                  <Heart className="h-8 w-8 text-red-500" />
+                </div>
+                <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-full shadow-lg animate-pulse">
+                  <PawPrint className="h-8 w-8 text-orange-500" />
+                </div>
               </div>
             </div>
           </div>

@@ -53,3 +53,41 @@ Future enhancements:
 - Refresh token handling (rotate access token before expiry and resync cookie).
 - Central unified fetch wrapper for all endpoints.
 - Server Actions to encapsulate mutations with auth automatically applied.
+
+---
+
+### HeroBannerCarousel (Homepage Postcard Slider)
+
+The homepage hero now uses `HeroBannerCarousel` (`components/layout/HeroBannerCarousel.tsx`) instead of a static image. It presents the images found in `assets/home_banner` in a looping, autoplaying postcard-style slider.
+
+Key characteristics:
+
+- Autoplay with pause on hover (Embla + autoplay plugin)
+- Manual navigation with previous/next circular buttons
+- Animated progress bar style dots (current slide shows animated fill over the autoplay interval)
+- Layered "postcard stack" visual (two subtle rotated translucent layers behind the active slide)
+- Perspective transform easing into flat on hover
+- Gradient overlay for consistent text contrast if future captions are added
+
+Basic usage (already wired in `app/page.tsx`):
+
+```tsx
+import HeroBannerCarousel from "@/components/layout/HeroBannerCarousel";
+
+export function Example() {
+  return (
+    <div className="max-w-xl mx-auto">
+      <HeroBannerCarousel autoPlayDelay={3500} />
+    </div>
+  );
+}
+```
+
+To add/remove images: place or remove `.jpg/.png` files under `assets/home_banner` and update the static imports at the top of `HeroBannerCarousel.tsx`. (Static imports allow Next.js to optimize and optionally generate blur placeholders.)
+
+Possible future enhancements:
+
+- Add caption metadata (array of objects with `image`, `title`, `cta`)
+- Integrate lazy loading for non-initial images with `loading="lazy"`
+- Add swipe progress indicator / fraction display (e.g., 1 / 7)
+- Convert aspect handling to accept explicit width/height ratio props
