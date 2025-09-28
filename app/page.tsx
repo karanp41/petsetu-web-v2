@@ -429,18 +429,24 @@ export default function Home() {
             journey.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
+            {/* <Button
               size="lg"
               variant="secondary"
               className="text-lg px-8 py-4 bg-white text-orange-600 hover:bg-gray-100"
             >
               <Smartphone className="mr-2 h-5 w-5" />
               Download iOS App
-            </Button>
+            </Button> */}
             <Button
               size="lg"
               variant="outline"
-              className="text-lg px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-orange-600"
+              className="text-lg px-8 py-4 border-2 border-white text-orange-600 hover:bg-white hover:text-orange-600"
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.app.mydoggy",
+                  "_blank"
+                )
+              }
             >
               <Smartphone className="mr-2 h-5 w-5" />
               Download Android App

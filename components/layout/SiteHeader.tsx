@@ -31,7 +31,9 @@ export function SiteHeader() {
           <div className="flex items-center space-x-2">
             <Link href="/" className="flex items-center space-x-2">
               <PawPrint className="h-8 w-8 text-orange-500" />
-              <span className="text-2xl font-bold text-gray-900">PetSetu</span>
+              <span className="text-2xl  text-gray-900">
+                <span className="text-orange-500 font-bold">Pet</span>Setu
+              </span>
             </Link>
           </div>
           <div className="hidden md:flex items-center space-x-8">
