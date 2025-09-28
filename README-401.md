@@ -91,3 +91,52 @@ Possible future enhancements:
 - Integrate lazy loading for non-initial images with `loading="lazy"`
 - Add swipe progress indicator / fraction display (e.g., 1 / 7)
 - Convert aspect handling to accept explicit width/height ratio props
+
+---
+
+### Lead & Enquiry (Post Requirement)
+
+A new call-to-action banner appears at the very top of the Home page. Clicking "Post Requirement" opens a dialog with a form users can submit for free. The form posts to the backend `/leads` endpoint and, if the user is logged in, includes their bearer token automatically.
+
+Key files:
+
+- `components/leads/LeadForm.tsx` – UI + validation + submission logic
+- `app/page.tsx` – CTA banner and dialog integration
+
+Environment/Config:
+
+- Set `NEXT_PUBLIC_API_BASE` in `.env.local` (client-visible) to your API base, e.g.:
+  - `NEXT_PUBLIC_API_BASE=http://localhost:4000/v1`
+
+Behavior:
+
+- If authenticated, the header `Authorization: Bearer <access token>` is included.
+- On success, a toast confirms submission and the form resets.
+- Validation via `zod` ensures required fields are present.
+
+Example payload sent to the API (shape mirrors backend expectations):
+
+```
+{
+  "title": "Test Lead",
+  "leadType": "POST_NEW_REQUIREMENT",
+  "description": "This is first testing lead",
+  "customerPersonalDetails": {
+    "name": "Virat kohli",
+    "email": "virat.kohil@petsetu.com",
+    "phone": "+91-9897408989",
+    "age": "31",
+    "gender": "m"
+  },
+  "customerAddressDetails": {
+    "address1": "Shivalik Nagar",
+    "address2": "Haridwar",
+    "city": "Haridwar",
+    "state": "Uttrakhand",
+    "country": "India",
+    "pincode": 249403,
+    "loc": { "type": "Point", "coordinates": [30.121212, 37.43234] }
+  },
+  "leadAdditionalDetails": { "petType": "Bunny", "requirementType": "adopt" }
+}
+```

@@ -1,9 +1,17 @@
 "use client";
 
 import HeroBannerCarousel from "@/components/layout/HeroBannerCarousel";
+import LeadForm from "@/components/leads/LeadForm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -111,6 +119,39 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50">
+      {/* Lead/Enquiry CTA Section */}
+      <section className="w-full py-4 bg-gradient-to-r from-orange-600 to-green-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+          <div className="text-white">
+            <p className="text-sm md:text-base font-medium uppercase tracking-wide opacity-90">
+              New
+            </p>
+            <h2 className="text-xl md:text-2xl font-semibold">
+              Tell us what you need — we’ll find the best match for you.
+            </h2>
+            <p className="text-sm opacity-90">
+              Post your requirement for free. No commitments.
+            </p>
+          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                size="lg"
+                variant="secondary"
+                className="whitespace-nowrap"
+              >
+                Post Requirement
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+              <DialogHeader>
+                <DialogTitle>Share your requirement</DialogTitle>
+              </DialogHeader>
+              <LeadForm />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </section>
       {/* Hero Banner Section */}
       <section className="relative py-20 lg:py-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
