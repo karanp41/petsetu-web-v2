@@ -1,4 +1,4 @@
-import { PawPrint } from "lucide-react";
+import { Facebook, Instagram, Linkedin, PawPrint } from "lucide-react";
 import Link from "next/link";
 
 export function SiteFooter() {
@@ -14,6 +14,36 @@ export function SiteFooter() {
             <p className="text-gray-400 leading-relaxed">
               Connecting loving families with pets in need of forever homes.
             </p>
+            {/* Social links */}
+            <div className="flex items-center gap-4 mt-5">
+              <Link
+                href="https://www.facebook.com/petsetu"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="PetSetu on Facebook"
+                className="text-gray-400 hover:text-orange-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 rounded"
+              >
+                <Facebook className="h-6 w-6" />
+              </Link>
+              <Link
+                href="https://www.instagram.com/petsetu/?hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="PetSetu on Instagram"
+                className="text-gray-400 hover:text-orange-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 rounded"
+              >
+                <Instagram className="h-6 w-6" />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/company/petsetu/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="PetSetu on LinkedIn"
+                className="text-gray-400 hover:text-orange-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 rounded"
+              >
+                <Linkedin className="h-6 w-6" />
+              </Link>
+            </div>
           </div>
 
           <div>
@@ -81,7 +111,7 @@ export function SiteFooter() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/#"
+                  href="mailto:petsetu@gmail.com"
                   className="hover:text-orange-400 transition-colors"
                 >
                   Help Center
@@ -89,7 +119,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/#"
+                  href="mailto:petsetu@gmail.com"
                   className="hover:text-orange-400 transition-colors"
                 >
                   Contact Us
@@ -97,7 +127,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/#"
+                  href="/privacy-policy"
                   className="hover:text-orange-400 transition-colors"
                 >
                   Privacy Policy

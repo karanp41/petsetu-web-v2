@@ -62,21 +62,32 @@ export function SiteHeader() {
               Browse Pets
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
+            {/* Login/Signup - text-like button on the left */}
             {!user && (
-              <>
-                {/* <Button
-                  variant="outline"
-                  className="hidden sm:inline-flex"
-                  onClick={() => {
-                    
-                  }}
-                >
-                  Sign In
-                </Button> */}
-                <AuthModal triggerClassName="bg-orange-600 hover:bg-orange-700" />
-              </>
+              <AuthModal
+                triggerClassName="hidden sm:inline-flex bg-transparent hover:bg-transparent px-0 h-auto shadow-none text-gray-700 hover:text-orange-600 underline-offset-4 hover:underline"
+                triggerLabel="Login/Signup"
+              />
             )}
+
+            {/* Place Free Ad - prominent CTA on the right */}
+            {!user ? (
+              // If not logged in, clicking this should open auth modal
+              <AuthModal
+                triggerClassName="hidden sm:inline-flex bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md shadow-orange-200"
+                triggerLabel="Place Free Ad"
+              />
+            ) : (
+              // If logged in, navigate to profile (placeholder for ad creation)
+              <Button
+                className="hidden sm:inline-flex bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md shadow-orange-200"
+                onClick={() => router.push("/profile")}
+              >
+                Place Free Ad
+              </Button>
+            )}
+
             {user && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

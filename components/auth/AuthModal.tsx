@@ -34,9 +34,13 @@ type LoginValues = z.infer<typeof loginSchema>;
 
 interface AuthModalProps {
   triggerClassName?: string;
+  triggerLabel?: string;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ triggerClassName }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({
+  triggerClassName,
+  triggerLabel = "Login/Signup",
+}) => {
   const { register: doRegister, login } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
@@ -91,7 +95,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ triggerClassName }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={triggerClassName}>Get Started</Button>
+        <Button className={triggerClassName}>{triggerLabel}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

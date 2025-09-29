@@ -25,7 +25,7 @@ export function LoginRequired({ message }: LoginRequiredProps) {
         // When user clicks button we simulate clicking the hidden trigger by toggling state
         // Simpler approach: just render AuthModal open prop variant (would require refactor). For now rely on user header button as alternate.
         <p className="text-xs text-gray-400">
-          Use the Get Started button in header to login.
+          Use the Login/Signup button in header to login.
         </p>
       )}
     </div>
