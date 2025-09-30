@@ -2,6 +2,11 @@
 // Image base host (S3)
 export const IMAGE_BASE_URL = "https://petsetu-dev.s3.ap-south-1.amazonaws.com";
 
+// Public site URL used for absolute links in metadata/sitemap/robots
+// Can be overridden via env for previews
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://petsetu.com";
+
 // Pet category -> backend categoryId mapping (as provided)
 // NOTE: user provided key name petCatogryIdMap (typo retained for compatibility)
 export const petCatogryIdMap: Record<string, string> = {
