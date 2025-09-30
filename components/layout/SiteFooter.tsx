@@ -119,7 +119,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="mailto:petsetu@gmail.com"
+                  href="/contact"
                   className="hover:text-orange-400 transition-colors"
                 >
                   Contact Us
