@@ -1,10 +1,10 @@
 # Vercel Cron Job: API Health Ping
 
-This project includes a scheduled job that pings the backend API hourly to warm caches and verify health.
+This project includes a scheduled job that pings the backend API once per day to warm caches and verify health.
 
 - Endpoint called: `${API_BASE}/data/app-initial-metadata`
 - Scheduled route: `/api/cron/health`
-- Schedule: Hourly (`0 * * * *`), configured in `vercel.json`
+- Schedule: Daily at 00:00 UTC (`0 0 * * *`), configured in `vercel.json`
 
 ## Setup
 

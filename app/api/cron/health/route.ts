@@ -1,4 +1,4 @@
-// Scheduled cron route: calls `${API_BASE}/data/app-initial-metadata` hourly via Vercel crons
+// Scheduled cron route: calls `${API_BASE}/data/app-initial-metadata` daily via Vercel crons
 // NOTE: Ensure API_BASE is set in Vercel Project Environment Variables (Production/Preview/Development) and points to your API base (e.g., https://api.example.com/v1)
 
 import { NextResponse } from "next/server";
