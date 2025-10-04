@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50">
       {/* Lead/Enquiry CTA Section */}
-      <section className="w-full py-4 bg-gradient-to-r from-orange-600 to-green-600">
+      <section className="w-full py-4 bg-gradient-to-tr from-[#fb923c] to-[#c2410c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           <div className="text-white">
             <p className="text-sm md:text-base font-medium uppercase tracking-wide opacity-90">
@@ -138,9 +138,9 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="secondary"
-                className="whitespace-nowrap"
+                className="whitespace-nowrap inset-0 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white hover:border-white"
               >
-                Post Requirement
+                Post Requirement <PawPrint className="ml-2 h-5 w-5" />
               </Button>
             </DialogTrigger>
             <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6">
