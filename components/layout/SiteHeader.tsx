@@ -79,10 +79,10 @@ export function SiteHeader() {
                 triggerLabel="Place Free Ad"
               />
             ) : (
-              // If logged in, navigate to profile (placeholder for ad creation)
+              // If logged in, navigate to new post page
               <Button
                 className="hidden sm:inline-flex bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md shadow-orange-200"
-                onClick={() => router.push("/profile")}
+                onClick={() => router.push("/post/new")}
               >
                 Place Free Ad
               </Button>
