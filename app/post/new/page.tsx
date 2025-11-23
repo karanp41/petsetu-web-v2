@@ -25,7 +25,7 @@ import { IMAGE_BASE_URL, PET_CATEGORY_ID_MAP } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ImagePlus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -155,7 +155,11 @@ export default function NewPostPage() {
   >([]);
   const [breedsLoading, setBreedsLoading] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
+  // Store uploaded items with a local blob preview URL to avoid cross-origin preview issues
+  const [uploadedItems, setUploadedItems] = useState<
+    { fileName: string; previewUrl: string }[]
+  >([]);
+  const previewUrlsRef = useRef<string[]>([]);
   const [uploading, setUploading] = useState(false);
   // Address search state
   const [q, setQ] = useState("");
@@ -299,9 +303,7 @@ export default function NewPostPage() {
     return () => sub.unsubscribe();
   }, [form]);
 
-  if (!loading && !user) {
-    return <LoginRequired message="Login to place your ad." />;
-  }
+  // Defer auth gate until after hooks to avoid conditional hook execution
 
   const onNext = async () => {
     console.log("Validating step", step);
@@ -346,15 +348,46 @@ export default function NewPostPage() {
 
   const onBack = () => setStep((s) => Math.max(0, s - 1));
 
-  // Build absolute URL for an uploaded image file name
-  const makeImageUrl = (p: string) =>
-    p?.startsWith("http")
-      ? p
-      : `${IMAGE_BASE_URL.replace(/\/$/, "")}/${p.replace(/^\//, "")}`;
+  // Build absolute URL for an uploaded image file name; URL-encode path safely
+  const makeImageUrl = (p: string) => {
+    if (!p) return "";
+    if (/^https?:\/\//i.test(p)) return p;
+    const base = IMAGE_BASE_URL.replace(/\/$/, "");
+    const clean = p.replace(/^\//, "");
+    // Encode each path segment to avoid ORB/CORS heuristics triggered by special chars
+    const encoded = clean
+      .split("/")
+      .map((seg) => encodeURIComponent(seg))
+      .join("/");
+    return `${base}/${encoded}`;
+  };
 
   const removePhoto = (idx: number) => {
-    setUploadedPhotos((prev) => prev.filter((_, i) => i !== idx));
+    setUploadedItems((prev) => {
+      const copy = [...prev];
+      const [removed] = copy.splice(idx, 1);
+      // Revoke the object URL to free memory
+      try {
+        if (removed?.previewUrl) {
+          URL.revokeObjectURL(removed.previewUrl);
+          previewUrlsRef.current = previewUrlsRef.current.filter(
+            (u) => u !== removed.previewUrl
+          );
+        }
+      } catch {}
+      return copy;
+    });
   };
+
+  // Cleanup all object URLs on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        previewUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+        previewUrlsRef.current = [];
+      } catch {}
+    };
+  }, []);
 
   const uploadSelectedFiles = async (files: File[]) => {
     if (!files.length) return;
@@ -364,8 +397,11 @@ export default function NewPostPage() {
     }
     setUploading(true);
     try {
-      const filenames: string[] = [];
+      const results: { fileName: string; previewUrl: string }[] = [];
       for (const f of files) {
+        // Create a local preview URL immediately; will be shown after upload completes
+        const previewUrl = URL.createObjectURL(f);
+        previewUrlsRef.current.push(previewUrl);
         const fd = new FormData();
         fd.append("file", f);
         const up = await fetch(`${API_BASE}/media/upload`, {
@@ -378,13 +414,25 @@ export default function NewPostPage() {
           throw new Error(t || "Upload failed");
         }
         const resp = await up.json();
-        if (resp?.fileName) filenames.push(resp.fileName);
+        // Prefer absolute URL fields if provided by backend
+        const absolute = resp?.url || resp?.fileUrl || resp?.Location;
+        const fileName: string = absolute?.startsWith?.("http")
+          ? absolute
+          : resp?.fileName;
+        if (fileName) {
+          results.push({ fileName, previewUrl });
+        } else {
+          // If no usable identifier returned, revoke preview and skip
+          try {
+            URL.revokeObjectURL(previewUrl);
+          } catch {}
+        }
       }
-      if (filenames.length) {
-        setUploadedPhotos((prev) => [...prev, ...filenames]);
+      if (results.length) {
+        setUploadedItems((prev) => [...prev, ...results]);
         toast({
           title: "Uploaded",
-          description: `${filenames.length} photo(s) added`,
+          description: `${results.length} photo(s) added`,
         });
       }
     } catch (err: any) {
@@ -444,12 +492,17 @@ export default function NewPostPage() {
         price: values.price,
         currency: values.currency,
         postType: values.postType,
-        ...(uploadedPhotos.length ? { photos: uploadedPhotos } : {}),
+        ...(uploadedItems.length
+          ? { photos: uploadedItems.map((i) => i.fileName) }
+          : {}),
 
         // Owner/Poster
         ownerId: user.id,
         postedBy: user.id,
         ...(user?.sellerType ? { sellerType: user.sellerType } : {}),
+
+        // Source
+        source: "web",
       };
 
       const res = await fetch(`${API_BASE}/post/combined`, {
@@ -478,6 +531,11 @@ export default function NewPostPage() {
       setCreating(false);
     }
   });
+
+  // Show login prompt after all hooks have been declared
+  if (!loading && !user) {
+    return <LoginRequired message="Login to place your ad." />;
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -1086,23 +1144,32 @@ export default function NewPostPage() {
                     )}
                   </div>
 
-                  {uploadedPhotos.length > 0 && (
+                  {uploadedItems.length > 0 && (
                     <div>
                       <div className="mb-2 text-xs text-muted-foreground">
-                        {uploadedPhotos.length} photo(s) ready
+                        {uploadedItems.length} photo(s) ready
                       </div>
                       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-                        {uploadedPhotos.map((name, idx) => (
+                        {uploadedItems.map((item, idx) => (
                           <div
-                            key={`${name}-${idx}`}
+                            key={`${item.fileName}-${idx}`}
                             className="group relative overflow-hidden rounded-xl border bg-white shadow-xs"
                           >
                             <div className="aspect-square w-full bg-gray-50">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
-                                src={makeImageUrl(name)}
+                                src={
+                                  item.previewUrl || makeImageUrl(item.fileName)
+                                }
                                 alt="Uploaded"
                                 className="h-full w-full object-cover"
+                                onError={(e) => {
+                                  const target =
+                                    e.currentTarget as HTMLImageElement;
+                                  const fallback = makeImageUrl(item.fileName);
+                                  if (target.src !== fallback)
+                                    target.src = fallback;
+                                }}
                               />
                             </div>
                             <button
