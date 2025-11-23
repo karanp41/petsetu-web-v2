@@ -17,17 +17,9 @@ export function LoginRequired({ message }: LoginRequiredProps) {
         {message || "You must be logged in to view this content."}
       </p>
       <div className="flex justify-center">
-        {/* We reuse AuthModal but also provide a simple button fallback */}
-        <AuthModal triggerClassName="hidden" />
         <Button onClick={() => setShowModal(true)}>Login / Register</Button>
       </div>
-      {showModal && (
-        // When user clicks button we simulate clicking the hidden trigger by toggling state
-        // Simpler approach: just render AuthModal open prop variant (would require refactor). For now rely on user header button as alternate.
-        <p className="text-xs text-gray-400">
-          Use the Login/Signup button in header to login.
-        </p>
-      )}
+      <AuthModal open={showModal} onOpenChange={setShowModal} />
     </div>
   );
 }

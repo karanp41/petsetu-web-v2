@@ -35,18 +35,30 @@ type LoginValues = z.infer<typeof loginSchema>;
 interface AuthModalProps {
   triggerClassName?: string;
   triggerLabel?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  redirectTo?: string;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
   triggerClassName,
   triggerLabel = "Login/Signup",
+  open: externalOpen,
+  onOpenChange: externalOnOpenChange,
+  redirectTo,
 }) => {
   const { register: doRegister, login } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const [tab, setTab] = useState<"register" | "login">("register");
   const [loading, setLoading] = useState(false);
+
+  const isControlled = externalOpen !== undefined;
+  const open = isControlled ? externalOpen : internalOpen;
+  const setOpen = isControlled
+    ? externalOnOpenChange || (() => {})
+    : setInternalOpen;
 
   const regForm = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
@@ -70,7 +82,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         description: "Welcome to PetSetu!",
       });
       setOpen(false);
-      router.push("/profile");
+      if (redirectTo) {
+        router.push(redirectTo);
+      } else {
+        router.refresh();
+      }
     } catch (e: any) {
       toast({ title: "Registration failed", description: e.message });
     } finally {
@@ -84,7 +100,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       await login(values.email, values.password);
       toast({ title: "Logged in", description: "Welcome back!" });
       setOpen(false);
-      router.push("/profile");
+      if (redirectTo) {
+        router.push(redirectTo);
+      } else {
+        router.refresh();
+      }
     } catch (e: any) {
       toast({ title: "Login failed", description: e.message });
     } finally {
@@ -94,9 +114,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className={triggerClassName}>{triggerLabel}</Button>
-      </DialogTrigger>
+      {!isControlled && (
+        <DialogTrigger asChild>
+          <Button className={triggerClassName}>{triggerLabel}</Button>
+        </DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

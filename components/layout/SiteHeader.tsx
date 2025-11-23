@@ -77,6 +77,7 @@ export function SiteHeader() {
               <AuthModal
                 triggerClassName="hidden sm:inline-flex bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md shadow-orange-200"
                 triggerLabel="Place Free Ad"
+                redirectTo="/post/new"
               />
             ) : (
               // If logged in, navigate to new post page
