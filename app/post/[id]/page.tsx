@@ -177,7 +177,7 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
         </div>
         <aside className="space-y-6">
-          <div className="p-4 rounded border space-y-2">
+          <div className="p-4 rounded border border-muted bg-card shadow-sm transition-shadow transition-transform duration-200 hover:shadow-md hover:-translate-y-0.5 space-y-2">
             <div className="text-2xl font-semibold">
               {post.currency || "INR"} {post.price ?? "—"}
             </div>
@@ -193,7 +193,7 @@ export default async function PostPage({ params }: PostPageProps) {
             )}
           </div>
           {post.ownerDetails && (
-            <div className="p-4 rounded border space-y-2">
+            <div className="p-4 rounded border border-muted bg-card shadow-sm transition-shadow transition-transform duration-200 hover:shadow-md hover:-translate-y-0.5 space-y-2">
               <h2 className="text-lg font-semibold">Owner</h2>
               {post.ownerDetails.name && (
                 <p className="text-sm">{post.ownerDetails.name}</p>
