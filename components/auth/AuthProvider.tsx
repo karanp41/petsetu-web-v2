@@ -134,7 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const resp = await clientPost<AuthResponse>("/auth/register", payload);
       persist(resp);
       // Sync cookie for server components.
-      syncHttpOnlyCookie(resp.tokens);
+      await syncHttpOnlyCookie(resp.tokens);
       return resp;
     },
     [persist]
@@ -147,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         password,
       });
       persist(resp);
-      syncHttpOnlyCookie(resp.tokens);
+      await syncHttpOnlyCookie(resp.tokens);
       return resp;
     },
     [persist]

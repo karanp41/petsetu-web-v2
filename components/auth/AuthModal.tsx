@@ -85,7 +85,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (redirectTo) {
         router.push(redirectTo);
       } else {
-        router.refresh();
+        window.location.reload();
       }
     } catch (e: any) {
       toast({ title: "Registration failed", description: e.message });
@@ -103,7 +103,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (redirectTo) {
         router.push(redirectTo);
       } else {
-        router.refresh();
+        window.location.reload();
       }
     } catch (e: any) {
       toast({ title: "Login failed", description: e.message });
