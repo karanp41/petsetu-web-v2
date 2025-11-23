@@ -121,8 +121,8 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50">
       {/* Lead/Enquiry CTA Section */}
       <section className="w-full py-4 bg-gradient-to-tr from-[#fb923c] to-[#c2410c]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-          <div className="text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center md:justify-between gap-4">
+          <div className="text-white text-center md:text-left">
             <p className="text-sm md:text-base font-medium uppercase tracking-wide opacity-90">
               New
             </p>
