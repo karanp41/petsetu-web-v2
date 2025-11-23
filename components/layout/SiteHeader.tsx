@@ -9,15 +9,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, PawPrint } from "lucide-react";
+import { LogOut, Menu, PawPrint } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function SiteHeader() {
   const { user, logout } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -63,6 +71,93 @@ export function SiteHeader() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
+            {/* Mobile menu */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <div className="flex flex-col space-y-4 mt-8">
+                  <SheetClose asChild>
+                    <Link
+                      href="/#features"
+                      className="text-lg text-gray-700 hover:text-orange-600 transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Features
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link
+                      href="/#care"
+                      className="text-lg text-gray-700 hover:text-orange-600 transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Pet Care
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link
+                      href="/search"
+                      className="text-lg text-gray-700 hover:text-orange-600 transition-colors"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Browse Pets
+                    </Link>
+                  </SheetClose>
+                  <div className="border-t pt-4">
+                    {!user ? (
+                      <div className="space-y-2">
+                        <AuthModal
+                          triggerClassName="w-full bg-transparent hover:bg-transparent px-0 h-auto shadow-none text-gray-700 hover:text-orange-600 underline-offset-4 hover:underline"
+                          triggerLabel="Login/Signup"
+                        />
+                        <AuthModal
+                          triggerClassName="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md shadow-orange-200"
+                          triggerLabel="Place Free Ad"
+                          redirectTo="/post/new"
+                        />
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <Button
+                          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-md shadow-orange-200"
+                          onClick={() => {
+                            router.push("/post/new");
+                            setIsOpen(false);
+                          }}
+                        >
+                          Place Free Ad
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => {
+                            router.push("/profile");
+                            setIsOpen(false);
+                          }}
+                        >
+                          Profile
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="w-full text-red-600 hover:text-red-700"
+                          onClick={() => {
+                            handleLogout();
+                            setIsOpen(false);
+                          }}
+                        >
+                          <LogOut className="h-4 w-4 mr-2" /> Logout
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+
             {/* Login/Signup - text-like button on the left */}
             {!user && (
               <AuthModal
