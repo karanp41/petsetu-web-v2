@@ -62,9 +62,9 @@ const features = [
   },
   {
     icon: Shield,
-    title: "Secure Transactions",
+    title: "Verified Kennel Owners",
     description:
-      "Safe and secure payment processing with buyer and seller protection for peace of mind.",
+      "Every breeder and kennel is thoroughly verified to ensure the highest standards of animal welfare and ethical breeding practices.",
   },
   {
     icon: Users,
@@ -97,7 +97,14 @@ const reminderTypes = [
   },
   {
     icon: Pill,
-    title: "Medication Alerts",
+    title: (
+      <>
+        Medication Alerts{" "}
+        <span className="text-xs font-semibold text-gray-500">
+          (Coming Soon)
+        </span>
+      </>
+    ),
     description:
       "Track medications and get alerts for refills and dosage times.",
     color: "bg-purple-50 text-purple-700",
@@ -334,7 +341,7 @@ export default function Home() {
                 key={index}
                 className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white"
               >
-                <CardContent className="p-8 text-center">
+                <CardContent className="p-6 text-center">
                   <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <feature.icon className="h-8 w-8 text-orange-600" />
                   </div>

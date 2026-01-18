@@ -108,6 +108,13 @@ export default function RootLayout({
           <SiteFooter />
           <Toaster />
         </AuthProvider>
+        {/* Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9965031619855172"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         {/* Google tag (gtag.js) */}
         <Script
           id="gtag-lib"
