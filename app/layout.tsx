@@ -103,6 +103,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         {/* Google AdSense */}
+        <meta name="google-adsense-account" content="ca-pub-9965031619855172" />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9965031619855172"
