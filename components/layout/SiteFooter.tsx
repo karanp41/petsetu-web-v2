@@ -1,7 +1,16 @@
+"use client";
 import { Facebook, Instagram, Linkedin, PawPrint } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export function SiteFooter() {
+  const searchParams = useSearchParams();
+  const renderWithoutLayout = searchParams.get('renderWithoutLayout') === 'true';
+
+  if (renderWithoutLayout) {
+    return null;
+  }
+
   return (
     <footer className="bg-gray-900 text-gray-300 py-16 mt-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -131,6 +140,22 @@ export function SiteFooter() {
                   className="hover:text-orange-400 transition-colors"
                 >
                   Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/community-guidelines"
+                  className="hover:text-orange-400 transition-colors"
+                >
+                  Community Guidelines
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms-of-service"
+                  className="hover:text-orange-400 transition-colors"
+                >
+                  Terms of Service
                 </Link>
               </li>
             </ul>

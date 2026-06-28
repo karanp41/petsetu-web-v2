@@ -12,6 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/search",
     "/profile",
     "/privacy-policy",
+    "/terms-of-service",
+    "/community-guidelines",
   ].map((path) => ({
     url: `${base}${path || "/"}`,
     changeFrequency: "weekly",

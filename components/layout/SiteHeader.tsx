@@ -18,7 +18,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, Menu, PawPrint } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function SiteHeader() {
@@ -26,12 +26,19 @@ export function SiteHeader() {
   const { toast } = useToast();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const renderWithoutLayout = searchParams.get('renderWithoutLayout') === 'true';
+
+  if (renderWithoutLayout) {
+    return null;
+  }
 
   const handleLogout = () => {
     logout();
     toast({ title: "Logged out", description: "See you soon!" });
     router.push("/");
   };
+
   return (
     <nav className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 shadow-md border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
