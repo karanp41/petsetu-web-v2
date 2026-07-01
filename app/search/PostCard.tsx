@@ -1,7 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { IMAGE_BASE_URL } from "@/lib/constants";
+import { IMAGE_BASE_URL, postTypeLabelMap } from "@/lib/constants";
 import { Post } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
@@ -75,13 +75,13 @@ export function PostCard({ post }: PostCardProps) {
             </h3>
             <Badge
               className={cn(
-                "text-xs capitalize",
-                post.postType === "sell" && "bg-green-100 text-green-700",
-                post.postType === "adopt" && "bg-blue-100 text-blue-700",
-                post.postType === "breed" && "bg-purple-100 text-purple-700"
+                "text-xs capitalize font-medium",
+                post.postType === "sell" && "bg-green-100 text-green-700 hover:bg-green-200",
+                post.postType === "adopt" && "bg-blue-100 text-blue-700 hover:bg-blue-200",
+                post.postType === "breed" && "bg-purple-100 text-purple-700 hover:bg-purple-200"
               )}
             >
-              {post.postType}
+              {postTypeLabelMap[post.postType] || post.postType}
             </Badge>
           </div>
           {location && (

@@ -1,5 +1,11 @@
 "use client";
 import type { AuthResponse, AuthUser, TokenPair } from "@/lib/auth";
+import {
+  AUTH_LOGOUT_EVENT,
+  AUTH_STORAGE_KEY,
+  clearAuthSession,
+  installAuth401Interceptor,
+} from "@/lib/http";
 import React, {
   createContext,
   useCallback,
@@ -18,9 +24,6 @@ interface AuthState {
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
-
-// LocalStorage keys
-const LS_KEY = "petsetu_auth_v1";
 
 export interface RegisterInput {
   name: string;
@@ -77,7 +80,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     try {
       const raw =
-        typeof window !== "undefined" ? localStorage.getItem(LS_KEY) : null;
+        typeof window !== "undefined"
+          ? localStorage.getItem(AUTH_STORAGE_KEY)
+          : null;
       if (raw) {
         const parsed: PersistedPayload = JSON.parse(raw);
         setUser(parsed.user);
@@ -89,11 +94,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleLogout = () => {
+      setUser(null);
+      setTokens(null);
+    };
+
+    window.addEventListener(AUTH_LOGOUT_EVENT, handleLogout);
+    return () => window.removeEventListener(AUTH_LOGOUT_EVENT, handleLogout);
+  }, []);
+
+  useEffect(() => {
+    return installAuth401Interceptor();
+  }, []);
+
   const persist = useCallback((payload: PersistedPayload) => {
     setUser(payload.user);
     setTokens(payload.tokens);
     if (typeof window !== "undefined") {
-      localStorage.setItem(LS_KEY, JSON.stringify(payload));
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
     }
   }, []);
 
@@ -156,10 +177,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = useCallback(() => {
     setUser(null);
     setTokens(null);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem(LS_KEY);
-      fetch("/api/auth/session", { method: "DELETE" }).catch(() => {});
-    }
+    clearAuthSession();
   }, []);
 
   return (

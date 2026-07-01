@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import "server-only"; // ensure this module is only ever executed on the server
 import { PET_CATEGORY_ID_MAP } from "./constants";
+import { createUnauthorizedError, isUnauthorizedStatus } from "./http";
 import { FetchPostsParams, Post, PostsApiResponse } from "./types";
 
 // Read API base from environment; prefer server-side env (no NEXT_PUBLIC needed here since used on server)
@@ -53,6 +54,10 @@ export async function fetchPosts(
     }
   );
 
+  if (isUnauthorizedStatus(res.status)) {
+    throw createUnauthorizedError();
+  }
+
   if (!res.ok) {
     throw new Error(`Failed to fetch posts: ${res.status} ${res.statusText}`);
   }
@@ -85,11 +90,8 @@ export async function fetchPostById(
     cache: "no-store", // always fresh
   });
 
-  if (res.status === 401) {
-    // Throw an error that callers can differentiate (attach status)
-    const err: any = new Error("Unauthorized");
-    err.status = 401;
-    throw err;
+  if (isUnauthorizedStatus(res.status)) {
+    throw createUnauthorizedError();
   }
 
   if (!res.ok) {

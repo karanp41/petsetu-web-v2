@@ -19,3 +19,9 @@ export const petCatogryIdMap: Record<string, string> = {
 
 // Alias with corrected spelling for internal usage
 export const PET_CATEGORY_ID_MAP = petCatogryIdMap;
+
+export const postTypeLabelMap: Record<string, string> = {
+  sell: "Rehoming Fee",
+  adopt: "Free Rehome",
+  breed: "Breeding Only",
+};
