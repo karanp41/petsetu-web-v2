@@ -219,7 +219,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                                     <div className="relative aspect-[4/3] w-full">
                                         <Image
                                             src={image.url}
-                                            alt={image.alt_text || blog.title}
+                                            alt={image?.alt_text as string || blog?.title as string || "Blog image"}
                                             fill
                                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                             className="object-cover"
