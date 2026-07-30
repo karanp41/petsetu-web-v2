@@ -76,6 +76,12 @@ export function SiteHeader() {
             >
               Browse Pets
             </Link>
+            <Link
+              href="/blogs"
+              className="text-gray-700 hover:text-orange-600 transition-colors"
+            >
+              Blog
+            </Link>
           </div>
           <div className="flex items-center space-x-3">
             {/* Mobile menu */}

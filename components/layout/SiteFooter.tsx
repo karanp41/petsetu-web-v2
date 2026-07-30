@@ -76,10 +76,10 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/#"
+                  href="/blogs"
                   className="hover:text-orange-400 transition-colors"
                 >
-                  Pet Care Guide
+                  Blog
                 </Link>
               </li>
             </ul>

@@ -69,3 +69,94 @@ export interface FetchPostsParams {
   location?: string; // city/state substring - server may ignore if unsupported
   petCategories?: string[]; // array of backend pet category IDs
 }
+
+export interface BlogAuthor {
+  _id?: string;
+  name?: string;
+  email?: string;
+  avatar?: string;
+}
+
+export interface BlogCategory {
+  _id?: string;
+  name?: string;
+  slug?: string;
+  icon?: string;
+}
+
+export interface BlogSeo {
+  meta_title?: string;
+  meta_description?: string;
+  focus_keyword?: string;
+  robots?: string;
+  canonical_url?: string;
+  og_title?: string;
+  og_description?: string;
+  og_image?: string;
+  twitter_card?: "summary" | "summary_large_image" | "player" | "app";
+}
+
+export interface BlogImage {
+  url: string;
+  alt_text?: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+  order?: number;
+}
+
+export interface BlogMetrics {
+  view_count?: number;
+  unique_view_count?: number;
+  reading_time?: number;
+  like_count?: number;
+  comment_count?: number;
+  share_count?: number;
+  bookmark_count?: number;
+}
+
+export interface Blog {
+  _id: string;
+  title: string;
+  slug?: string;
+  excerpt?: string;
+  content?: string;
+  content_format?: "html" | "markdown" | "plaintext";
+  featured_image?: BlogImage;
+  gallery?: BlogImage[];
+  author?: BlogAuthor;
+  co_authors?: BlogAuthor[];
+  categories?: BlogCategory[];
+  category?: BlogCategory;
+  tags?: string[];
+  publishedAt?: string;
+  published_at?: string;
+  readTime?: number; // minutes
+  status?: "published" | "draft" | "archived";
+  visibility?: "public" | "private" | "password_protected";
+  language?: string;
+  seo?: BlogSeo;
+  metrics?: BlogMetrics;
+  is_featured?: boolean;
+  is_sticky?: boolean;
+  allow_comments?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BlogsApiResponse {
+  results: Blog[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalResults: number;
+}
+
+export interface FetchBlogsParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  status?: "published" | "draft" | "archived";
+  category?: string;
+  tag?: string;
+}

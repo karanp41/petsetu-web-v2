@@ -2,7 +2,14 @@ import { cookies } from "next/headers";
 import "server-only"; // ensure this module is only ever executed on the server
 import { PET_CATEGORY_ID_MAP } from "./constants";
 import { createUnauthorizedError, isUnauthorizedStatus } from "./http";
-import { FetchPostsParams, Post, PostsApiResponse } from "./types";
+import {
+  Blog,
+  BlogsApiResponse,
+  FetchBlogsParams,
+  FetchPostsParams,
+  Post,
+  PostsApiResponse,
+} from "./types";
 
 // Read API base from environment; prefer server-side env (no NEXT_PUBLIC needed here since used on server)
 const API_BASE = process.env.API_BASE;
@@ -100,4 +107,66 @@ export async function fetchPostById(
     );
   }
   return (await res.json()) as Post;
+}
+
+export async function fetchBlogs(
+  params: FetchBlogsParams = {}
+): Promise<BlogsApiResponse> {
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = "published_at:desc",
+    status = "published",
+    category,
+    tag,
+  } = params;
+
+  const searchParams = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+    sortBy,
+    status,
+  });
+  if (category) searchParams.set("category", category);
+  if (tag) searchParams.set("tag", tag);
+
+  const res = await fetch(`${API_BASE}/blogs?${searchParams.toString()}`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+    // Always fresh for SEO accuracy
+    cache: "no-store",
+  });
+
+  if (isUnauthorizedStatus(res.status)) {
+    throw createUnauthorizedError();
+  }
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch blogs: ${res.status} ${res.statusText}`);
+  }
+  return (await res.json()) as BlogsApiResponse;
+}
+
+export async function fetchBlogBySlug(slug: string): Promise<Blog> {
+  if (!slug) throw new Error("fetchBlogBySlug requires a slug");
+
+  const res = await fetch(`${API_BASE}/blogs/slug/${slug}`, {
+    headers: {
+      "content-type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (isUnauthorizedStatus(res.status)) {
+    throw createUnauthorizedError();
+  }
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch blog ${slug}: ${res.status} ${res.statusText}`
+    );
+  }
+  return (await res.json()) as Blog;
 }
