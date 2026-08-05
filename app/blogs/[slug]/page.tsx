@@ -1,3 +1,4 @@
+import { SocialShare } from "@/components/layout/SocialShare";
 import { fetchBlogBySlug } from "@/lib/api";
 import { SITE_URL } from "@/lib/constants";
 import { Blog } from "@/lib/types";
@@ -38,8 +39,12 @@ export async function generateMetadata({
         seo?.meta_description ||
         blog.excerpt ||
         "Read the latest pet care tips and stories on PetSetu.";
-    const canonical = seo?.canonical_url || `${SITE_URL}/blog/${blog.slug || blog._id}`;
-    const ogImage = seo?.og_image || blog.featured_image?.url;
+    const canonical = seo?.canonical_url || `${SITE_URL}/blogs/${slug}`;
+    const rawOgImage =
+        seo?.og_image || blog.featured_image?.url || `${SITE_URL}/logo.png`;
+    const ogImage = rawOgImage.startsWith("http")
+        ? rawOgImage
+        : `${SITE_URL}${rawOgImage.startsWith("/") ? "" : "/"}${rawOgImage}`;
     const keywords = [
         seo?.focus_keyword,
         ...(blog.tags || []),
@@ -179,6 +184,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                             )}
                         </div>
                     )}
+                    <div className="mt-8 flex items-center justify-center gap-3">
+                        <SocialShare
+                            url={`${SITE_URL}/blogs/${slug}`}
+                            title={blog.title}
+                        />
+                    </div>
                 </div>
             </section>
 
